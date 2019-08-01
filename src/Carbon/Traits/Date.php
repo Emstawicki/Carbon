@@ -846,6 +846,9 @@ trait Date
             // @property-read string long name of month translated according to Carbon locale, in english if no translation available for current language
             case $name === 'monthName':
                 return $this->getTranslatedMonthName();
+                // @property-read string long name of month translated according to Carbon locale, in english if no translation available for current language
+            case $name === 'monthNameGenitive':
+            return $this->getTranslatedMonthName(null, '', null, false);
             // @property-read string short name of month translated according to Carbon locale, in english if no translation available for current language
             case $name === 'shortMonthName':
                 return $this->getTranslatedShortMonthName();
@@ -1167,10 +1170,10 @@ trait Date
         return $this;
     }
 
-    protected function getTranslatedFormByRegExp($baseKey, $keySuffix, $context, $subKey, $defaultValue)
+    protected function getTranslatedFormByRegExp($baseKey, $keySuffix, $context, $subKey, $defaultValue, $standaloneLookup)
     {
         $key = $baseKey.$keySuffix;
-        $standaloneKey = "${key}_standalone";
+        $standaloneKey = ($standaloneLookup) ? "${key}_standalone" : $key;
         $baseTranslation = $this->getTranslationMessage($key);
 
         if ($baseTranslation instanceof Closure) {
@@ -1234,10 +1237,11 @@ trait Date
      *
      * @return string
      */
-    public function getTranslatedMonthName($context = null, $keySuffix = '', $defaultValue = null)
+    public function getTranslatedMonthName($context = null, $keySuffix = '', $defaultValue = null, $standaloneLookup = true)
     {
-        return $this->getTranslatedFormByRegExp('months', $keySuffix, $context, $this->month - 1, $defaultValue ?: $this->englishMonth);
+        return $this->getTranslatedFormByRegExp('months', $keySuffix, $context, $this->month - 1, $defaultValue ?: $this->englishMonth, $standaloneLookup);
     }
+    
 
     /**
      * Get the translation of the current short month day name (with context for languages with multiple forms).
