@@ -1170,7 +1170,7 @@ trait Date
         return $this;
     }
 
-    protected function getTranslatedFormByRegExp($baseKey, $keySuffix, $context, $subKey, $defaultValue, $standaloneLookup)
+    protected function getTranslatedFormByRegExp($baseKey, $keySuffix, $context, $subKey, $defaultValue, $standaloneLookup = true)
     {
         $key = $baseKey.$keySuffix;
         $standaloneKey = ($standaloneLookup) ? "${key}_standalone" : $key;
